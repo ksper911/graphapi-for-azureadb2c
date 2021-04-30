@@ -11,9 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 class TestGraphApi {
@@ -31,6 +34,9 @@ class TestGraphApi {
     final static String USER_PRINCIPAL_NAME = "";
     final static String ISSUER = "";
     final static String ISSUER_ASSIGNED_ID = "";
+    final static String DISPLAY_NAME_FOR_UPDATE = "";
+    final static String ISSUER_ASSIGNED_ID_FOR_UPDATE = "";
+    final static String OBJECT_ID_FOR_UPDATE = "";
 
     @Test
     void createUser() {
@@ -75,6 +81,38 @@ class TestGraphApi {
                         .users()
                         .buildRequest()
                         .post(user); //(*5)
+
+    }
+
+    @Test
+    void updateUser() {
+
+        /**
+         * ユーザーインスタンスの作成
+         */
+        User user = new User();
+
+
+        /**
+         * ユーザー属性の設定
+         */
+        user.displayName = DISPLAY_NAME_FOR_UPDATE;
+        ObjectIdentity objectIdentity = new ObjectIdentity();
+        objectIdentity.signInType = "username";
+        objectIdentity.issuer = ISSUER;
+        objectIdentity.issuerAssignedId = ISSUER_ASSIGNED_ID_FOR_UPDATE;
+        List<ObjectIdentity> identities = new ArrayList();
+        identities.add(objectIdentity);
+        user.identities = identities;
+
+        /**
+         * Azure AD B2C 上にユーザーを更新
+         */
+        createIGraphServiceClient(
+                CLIENT_ID,
+                CLIENT_SECRET,
+                DOMAIN_NAME).users(OBJECT_ID_FOR_UPDATE)
+                .buildRequest().patch(user);  //  (*1)
 
     }
 
