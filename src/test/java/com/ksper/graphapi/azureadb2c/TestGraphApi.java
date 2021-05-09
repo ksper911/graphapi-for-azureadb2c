@@ -34,6 +34,7 @@ class TestGraphApi {
     final static String DISPLAY_NAME_FOR_UPDATE = "";
     final static String ISSUER_ASSIGNED_ID_FOR_UPDATE = "";
     final static String OBJECT_ID_FOR_UPDATE = "";
+    final static String OBJECT_ID_FOR_DELETE = "";
 
     @Test
     void createUser() {
@@ -110,6 +111,21 @@ class TestGraphApi {
                 CLIENT_SECRET,
                 DOMAIN_NAME).users(OBJECT_ID_FOR_UPDATE)
                 .buildRequest().patch(user);  //  (*1)
+
+    }
+
+
+    @Test
+    void deleteUser() {
+
+        /**
+         * Azure AD B2C 上にユーザーを更新
+         */
+        createIGraphServiceClient(
+                CLIENT_ID,
+                CLIENT_SECRET,
+                DOMAIN_NAME).users(OBJECT_ID_FOR_DELETE)
+                .buildRequest().delete();  //  (*1)
 
     }
 
